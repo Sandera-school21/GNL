@@ -43,10 +43,8 @@ char	*prov_ost(char *ost, char **line)
 	return (point);
 }
 
-int	ft_check_read(int w_r, char *ost)
+int		ft_check_read(int w_r, char *ost)
 {
-//	if (ost[0] == '\0' && w_r == 0 && w_r < BUFFER_SIZE)
-//		return (0);
 	if (w_r < BUFFER_SIZE && !ost && w_r != -1)
 		return (0);
 	if (w_r < 0)
