@@ -1,4 +1,5 @@
 #include "get_next_line_bonus.h"
+#include <stdio.h>
 
 void	ft_strclr(char *s)
 {
@@ -43,18 +44,12 @@ char	*prov_ost(char **ost, char **line, int fd)
 	return (point);
 }
 
-int		ft_check_read(int w_r, char **ost, char **line, int fd)
+int		ft_check_read(int w_r, char **ost, int fd)
 {
-	if (w_r == 0)
+	if (ost[fd][0] == '\0' && w_r == 0)
 		return (0);
 	if (w_r < 0)
 		return (-1);
-	if (ft_strlen(*line) == 0)
-		return (1);
-	if (ost[fd] != NULL)
-		return (1);
-	if (ost[fd] == NULL)
-		return (0);
 	return (1);
 }
 
@@ -69,18 +64,18 @@ int		get_next_line(int fd, char **line)
 	if (!line || read(fd, 0, 0) || BUFFER_SIZE <= 0 || fd < 0)
 		return (-1);
 	point = prov_ost(ost, line, fd);
+	w_r = 1;
 	while (!point && (w_r = read(fd, buf, BUFFER_SIZE)))
 	{
 		buf[w_r] = '\0';
 		if ((point = ft_strrchr(buf, '\n')))
 		{
 			*point = '\0';
-			point++;
-			ost[fd] = ft_strdup(point);
+			ost[fd] = ft_strdup(++point);
 		}
 		vrem = *line;
 		*line = ft_strjoin(*line, buf);
 		free(vrem);
 	}
-	return (ft_check_read(w_r, ost, line, fd));
+	return (ft_check_read(w_r, ost, fd));
 }
